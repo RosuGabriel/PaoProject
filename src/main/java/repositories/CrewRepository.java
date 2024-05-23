@@ -15,4 +15,6 @@ public interface CrewRepository {
     CrewMember getCrewById(int id, EntityManager em);
     void updateCrew(CrewMember crew, EntityManager em);
     void deleteCrew(int id, EntityManager em);
+
+    List<CrewMember> getCrewContaining(String str, EntityManager entityManager);
 }

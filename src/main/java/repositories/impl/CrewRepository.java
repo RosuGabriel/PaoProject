@@ -53,4 +53,11 @@ public class CrewRepository implements repositories.CrewRepository {
         em.remove(em.find(CrewMember.class, id));
         em.getTransaction().commit();
     }
+
+    @Override
+    public List<CrewMember> getCrewContaining(String str, EntityManager entityManager) {
+        var query =  entityManager.createQuery("select c from CrewMember c where lower(c.name) like :substring", CrewMember.class);
+        query.setParameter("substring", "%"+ str.toLowerCase() +"%");
+        return query.getResultList();
+    }
 }

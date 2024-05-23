@@ -17,7 +17,7 @@ public class CrewService implements services.CrewService {
         scanner.nextLine();
         switch (_option) {
             case (1):
-                System.out.println("Enter title:");
+                System.out.println("Enter name:");
                 var name = scanner.nextLine();
                 System.out.println("Enter birth year:");
                 var year = scanner.nextInt();
@@ -32,7 +32,7 @@ public class CrewService implements services.CrewService {
                 repo.addCrew(actor, em);
                 return actor;
             case (2):
-                System.out.println("Enter title:");
+                System.out.println("Enter name:");
                 name = scanner.nextLine();
                 System.out.println("Enter birth year:");
                 year = scanner.nextInt();
@@ -56,17 +56,62 @@ public class CrewService implements services.CrewService {
 
     @Override
     public List<CrewMember> getAll(EntityManager entityManager) {
-        return null;
+        return repo.getAllCrew(entityManager);
     }
 
     @Override
-    public void delete(CrewMember crew, EntityManager entityManager) {
-
+    public void delete(Scanner scanner, EntityManager entityManager) {
+        System.out.println("Enter the id of the crew member you want to delete:");
+        var id = scanner.nextInt();
+        scanner.nextLine();
+        repo.deleteCrew(id, entityManager);
     }
 
     @Override
     public void update(Scanner scanner, EntityManager entityManager) {
+        System.out.println("Enter crew member id:");
+        var id = scanner.nextInt();
+        scanner.nextLine();
+        var crew = repo.getCrewById(id, entityManager);
+        if(crew == null) {
+            System.out.println("No crew member with this id!");
+            return;
+        }
+        System.out.println("(1)Edit name    (2)Edit birth date    (0)Abort");
+        var _option = scanner.nextInt();
+        scanner.nextLine();
+        switch (_option) {
+            case 1:
+                System.out.println("Enter name:");
+                crew.setName(scanner.nextLine());
+                repo.updateCrew(crew, entityManager);
+                break;
+            case 2:
+                System.out.println("Enter birth year:");
+                var year = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Enter birth month:");
+                var month = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Enter birth day:");
+                var day = scanner.nextInt();
+                scanner.nextLine();
+                crew.setBirth(day, month, year);
+                repo.updateCrew(crew, entityManager);
+                break;
+            case 0:
+                return;
+            default:
+                System.out.println("Not an option!");
+                break;
+        }
+    }
 
+    @Override
+    public List<CrewMember> getAllContaining(Scanner scanner, EntityManager entityManager) {
+        System.out.println("Enter member name:");
+        var str = scanner.nextLine();
+        return repo.getCrewContaining(str, entityManager);
     }
 
 

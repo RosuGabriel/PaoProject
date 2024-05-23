@@ -35,8 +35,8 @@ public class ItemRepository implements repositories.ItemRepository  {
 
     @Override
     public List<Item> getItemsContaining(String str, EntityManager em) {
-        var query =  em.createQuery("select i from Item i where i.title like :substring", Item.class);
-        query.setParameter("substring", "%"+ str +"%");
+        var query =  em.createQuery("select i from Item i where lower(i.title) like :substring", Item.class);
+        query.setParameter("substring", "%"+ str.toLowerCase() +"%");
         return query.getResultList();
     }
 

@@ -30,6 +30,13 @@ public class CrewMember {
     public String getName() {
         return name;
     }
+
+    public void setName(String _name) {
+        name = _name;
+    }
+    public void setBirth(int day, int month, int year) {
+        born = LocalDate.of(year, month, day);
+    }
     public void addItem(Item item) {
         items.add(item);
     }
