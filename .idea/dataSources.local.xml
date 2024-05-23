@@ -10,7 +10,7 @@
       <user-name>paoprojectadmin</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="database" qname="@">
+          <node kind="database" qname="PaoProjectDb">
             <node kind="schema" qname="@" />
           </node>
         </introspection-scope>

@@ -27,11 +27,9 @@ public class Item {
     private List<Review> reviews;
 
     public Item() {
-        reviews = new ArrayList<>();
         postDate = LocalDate.now();
     }
     public Item(String _title, LocalDate _releaseDate) {
-        reviews = new ArrayList<>();
         title = _title;
         releaseDate = _releaseDate;
         postDate = LocalDate.now();
@@ -72,7 +70,6 @@ public class Item {
     public List<CrewMember> getCrew() {
         return crew;
     }
-
     public void setCrew(List<CrewMember> _crew) {
         crew = _crew;
     }
@@ -85,17 +82,18 @@ public class Item {
         reviews = _reviews;
     }
     public void addReview(Review _review) {
+        if (reviews == null) {
+            reviews = new ArrayList<>();
+        }
         reviews.add(_review);
     }
     public void addCrew(CrewMember _crew) {
+        if (crew == null) {
+            crew = new ArrayList<>();
+        }
         crew.add(_crew);
     }
     public void show() {
         System.out.println("[Product]: id: " + id + ", title: " + title + ", release date: " + releaseDate);
-    }
-    public void showCrew() {
-        for(var crewMember : crew) {
-            crewMember.show();
-        }
     }
 }

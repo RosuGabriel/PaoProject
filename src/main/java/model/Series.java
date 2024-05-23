@@ -16,6 +16,12 @@ public class Series extends Item {
         super(_title, _releaseDate);
     }
 
+    public int getSeasons() {
+        return seasonsNumber;
+    }
+    public void setSeasons(int num) {
+        seasonsNumber = num;
+    }
 
     @Override
     public void show(){

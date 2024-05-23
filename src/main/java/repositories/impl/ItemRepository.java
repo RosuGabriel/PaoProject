@@ -1,10 +1,7 @@
 package repositories.impl;
 
 import jakarta.persistence.EntityManager;
-import model.AppUser;
-import model.Item;
-import model.Movie;
-import model.Series;
+import model.*;
 
 import java.util.List;
 
@@ -17,22 +14,13 @@ public class ItemRepository implements repositories.ItemRepository  {
     }
 
     @Override
-    public void addMovie(Movie movie, EntityManager em) {
-        em.getTransaction().begin();
-        em.persist(movie);
-        em.getTransaction().commit();
+    public List<Review> getReviews(Item item, EntityManager em) {
+        return em.createQuery("select i.reviews from Item i where i.id = :review_id", Review.class).getResultList();
     }
 
     @Override
-    public void addSeries(Series series, EntityManager em) {
-        em.getTransaction().begin();
-        em.persist(series);
-        em.getTransaction().commit();
-    }
-
-    @Override
-    public void getReviews(Item item, EntityManager em) {
-        em.createQuery("select i.reviews from Item i where i.id = :review_id");
+    public List<CrewMember> getCrew(Item item, EntityManager em) {
+        return em.createQuery("select i.crew from Item i where i.id = :crew_id", CrewMember.class).getResultList();
     }
 
     @Override
@@ -43,6 +31,13 @@ public class ItemRepository implements repositories.ItemRepository  {
     @Override
     public Item getItemById(int id, EntityManager em) {
         return em.find(Item.class, id);
+    }
+
+    @Override
+    public List<Item> getItemsContaining(String str, EntityManager em) {
+        var query =  em.createQuery("select i from Item i where i.title like :substring", Item.class);
+        query.setParameter("substring", "%"+ str +"%");
+        return query.getResultList();
     }
 
     @Override

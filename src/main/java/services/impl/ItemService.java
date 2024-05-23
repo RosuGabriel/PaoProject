@@ -2,6 +2,7 @@ package services.impl;
 
 import jakarta.persistence.EntityManager;
 import model.*;
+import repositories.impl.CrewRepository;
 import repositories.impl.ItemRepository;
 import repositories.impl.UserRepository;
 
@@ -44,7 +45,11 @@ public class ItemService implements services.ItemService {
                 System.out.println("Enter release day:");
                 day = scanner.nextInt();
                 scanner.nextLine();
+                System.out.println("Enter number of seasons:");
+                var seasons = scanner.nextInt();
+                scanner.nextLine();
                 Series series = new Series(title, LocalDate.of(year, month, day));
+                series.setSeasons(seasons);
                 repo.addItem(series, em);
                 return series;
             case(0):
@@ -58,7 +63,7 @@ public class ItemService implements services.ItemService {
     @Override
     public void showReviews(Item item, Scanner scanner, EntityManager em) {
         var reviews = item.getReviews();
-        if (reviews != null | !reviews.isEmpty()) {
+        if (reviews != null) {
             for (var review : reviews) {
                 review.show();
             }
@@ -108,7 +113,6 @@ public class ItemService implements services.ItemService {
                 repo.updateItem(item, em);
                 break;
             case 2:
-                System.out.println("Enter title:");
                 System.out.println("Enter release year:");
                 var year = scanner.nextInt();
                 scanner.nextLine();
@@ -122,10 +126,17 @@ public class ItemService implements services.ItemService {
                 repo.updateItem(item, em);
                 break;
             case 3:
+                CrewRepository crewRepo = new CrewRepository();
                 System.out.println("Enter crew id:");
-                CrewMember crew = null; // not implemented
+                var id = scanner.nextInt();
+                CrewMember crew = crewRepo.getCrewById(id, em);
+                if (crew == null) {
+                    System.out.println("A crew member with this id doesn't exist!");
+                    return;
+                }
                 item.addCrew(crew);
                 repo.updateItem(item, em);
+                System.out.println("Successfully added " + crew.getName() + "!");
                 break;
             case 0:
                 return;
@@ -169,6 +180,8 @@ public class ItemService implements services.ItemService {
 
     @Override
     public List<Item> getAllContaining(Scanner scanner, EntityManager em) {
-        return repo.getAllItems(em);
+        System.out.println("Enter title:");
+        var str = scanner.nextLine();
+        return repo.getItemsContaining(str, em);
     }
 }

@@ -64,8 +64,11 @@ public class Menu implements MenuService {
         }
     }
 
-    protected void search() {
-
+    protected void search(Scanner scanner, EntityManager entityManager) {
+        var items = itemService.getAllContaining(scanner, entityManager);
+        for (var item : items) {
+            item.show();
+        }
     }
 
     protected void addItem(Scanner scanner, EntityManager entityManager) {
@@ -94,7 +97,7 @@ public class Menu implements MenuService {
             int _option;
 
             if (user != null) {
-                System.out.println("(1)Show all    (2)Select item    (3)Search item    (4)Add item    (5)Log out    (0)Exit");
+                System.out.println("(1)Show all    (2)Select item    (3)Search item    (4)Add item     (5)Create crew    (6)Log out    (0)Exit");
                 _option = scanner.nextInt();
                 scanner.nextLine();
 
@@ -106,12 +109,15 @@ public class Menu implements MenuService {
                         select(scanner, entityManager);
                         break;
                     case 3:
-                        search();
+                        search(scanner, entityManager);
                         break;
                     case 4:
                         addItem(scanner, entityManager);
                         break;
                     case 5:
+                        crewService.create(scanner, entityManager);
+                        break;
+                    case 6:
                         logOut();
                         break;
                     case 0:
@@ -131,7 +137,7 @@ public class Menu implements MenuService {
                         select(scanner, entityManager);
                         break;
                     case 3:
-                        search();
+                        search(scanner, entityManager);
                         break;
                     case 4:
                         register(scanner, entityManager);
@@ -152,6 +158,7 @@ public class Menu implements MenuService {
     private static Menu instance;
     private AppUser user = null;
 
+    private final CrewService crewService = new CrewService();
     private final ItemService itemService = new ItemService();
     private final UserService userService = new UserService();
 }
